@@ -1,0 +1,98 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  font-family: system-ui, sans-serif;
+  color: #dee2e6;
+  background: url("../images/artisan-mousepad.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  text-align: center;
+  display: grid;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+
+.box {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.1s;
+  
+}
+
+.idle {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.red {
+  background: rgba(239, 68, 68, 0.85);
+}
+
+.blue {
+  background: rgba(59, 130, 246, 0.85);
+}
+
+#list {
+  list-style-position: inside;
+  padding: 0;
+  line-height: 1.8;
+}
+
+#summary {
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+button {
+  margin-top: 16px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 64px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .card {
+    max-width: 520px;
+    padding: 32px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
