@@ -8,11 +8,12 @@ const restart = document.getElementById("restart");
 
 const maxAttempts = 5;
 let times = [];
-const state = {
+const states = {
   idle: "idle",
   waiting: "waiting",
   ready: "ready",
 }
+let state = states.idle;
 let timer;
 let startTime;
 
@@ -22,14 +23,14 @@ function boxController(className, text) {
 }
 
 function startRound() {
-  state = state.waiting;
+  state = states.waiting;
   boxController("red", "wait for blue");
   const delay = 1000 + Math.random() * 3000;
   timer = setTimeout(showBlue, delay);
 }
 
 function showBlue() {
-  state = state.ready;
+  state = states.ready;
   boxController("blue", "click");
   startTime = performance.now();
 }
@@ -40,7 +41,7 @@ function recordTime() {
   attemptsText.textContent = "Attempts remaining: " + (maxAttempts - times.length);
 
   if (times.length < maxAttempts) {
-    state = state.idle;
+    state = states.idle;
     boxController("idle", ms + " ms\nclick to continue");
   } else {
     showResults();
@@ -49,12 +50,12 @@ function recordTime() {
 
 function antiPrediction() {
   clearTimeout(timer);
-  state = state.idle;
+  state = states.idle;
   boxController("idle", "too early, click to retry");
 }
 
 function showResults() {
-  state = state.done;
+  state = states.done;
   box.classList.add("hidden");
   message.classList.add("hidden");
   list.innerHTML = "";
@@ -74,7 +75,7 @@ function showResults() {
 
 function reset() {
   times = [];
-  state = state.idle;
+  state = states.idle;
   attemptsText.textContent = "Attempts remaining: " + maxAttempts;
   results.classList.add("hidden");
   box.classList.remove("hidden");
@@ -83,12 +84,16 @@ function reset() {
 }
 
 box.addEventListener("pointerdown", () => {
-  if (state === state.idle) {
-    startRound();
-  } else if (state === state.waiting) {
-    antiPrediction();
-  } else if (state === state.ready) {
-    recordTime();
+  switch (state) {
+    case states.idle:
+      startRound();
+      break;
+    case states.waiting:
+      antiPrediction();
+      break;
+    case states.ready:
+      recordTime();
+      break;
   }
 });
 
