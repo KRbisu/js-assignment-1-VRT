@@ -8,29 +8,30 @@ const restart = document.getElementById("restart");
 
 const maxAttempts = 5;
 let times = [];
-const states = {
+const STATES = {
   idle: "idle",
   waiting: "waiting",
   ready: "ready",
+  done: "done"
 }
-let state = states.idle;
+let state = STATES.idle;
 let timer;
 let startTime;
 
 function boxController(className, text) {
-  box.className = "box" + className;
+  box.className = "box " + className;
   box.textContent = text;
 }
 
 function startRound() {
-  state = states.waiting;
+  state = STATES.waiting;
   boxController("red", "wait for blue");
   const delay = 1000 + Math.random() * 3000;
   timer = setTimeout(showBlue, delay);
 }
 
 function showBlue() {
-  state = states.ready;
+  state = STATES.ready;
   boxController("blue", "click");
   startTime = performance.now();
 }
@@ -41,7 +42,7 @@ function recordTime() {
   attemptsText.textContent = "Attempts remaining: " + (maxAttempts - times.length);
 
   if (times.length < maxAttempts) {
-    state = states.idle;
+    state = STATES.idle;
     boxController("idle", ms + " ms\nclick to continue");
   } else {
     showResults();
@@ -50,12 +51,12 @@ function recordTime() {
 
 function antiPrediction() {
   clearTimeout(timer);
-  state = states.idle;
+  state = STATES.idle;
   boxController("idle", "too early, click to retry");
 }
 
 function showResults() {
-  state = states.done;
+  state = STATES.done;
   box.classList.add("hidden");
   message.classList.add("hidden");
   list.innerHTML = "";
@@ -75,7 +76,7 @@ function showResults() {
 
 function reset() {
   times = [];
-  state = states.idle;
+  state = STATES.idle;
   attemptsText.textContent = "Attempts remaining: " + maxAttempts;
   results.classList.add("hidden");
   box.classList.remove("hidden");
@@ -85,13 +86,13 @@ function reset() {
 
 box.addEventListener("pointerdown", () => {
   switch (state) {
-    case states.idle:
+    case STATES.idle:
       startRound();
       break;
-    case states.waiting:
+    case STATES.waiting:
       antiPrediction();
       break;
-    case states.ready:
+    case STATES.ready:
       recordTime();
       break;
   }
