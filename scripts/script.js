@@ -8,7 +8,11 @@ const restart = document.getElementById("restart");
 
 const maxAttempts = 5;
 let times = [];
-let state = "idle";
+const state = {
+  idle: "idle",
+  waiting: "waiting",
+  ready: "ready",
+}
 let timer;
 let startTime;
 
@@ -18,14 +22,14 @@ function boxController(className, text) {
 }
 
 function startRound() {
-  state = "waiting";
+  state = state.waiting;
   boxController("red", "wait for blue");
   const delay = 1000 + Math.random() * 3000;
   timer = setTimeout(showBlue, delay);
 }
 
 function showBlue() {
-  state = "ready";
+  state = state.ready;
   boxController("blue", "click");
   startTime = performance.now();
 }
@@ -36,7 +40,7 @@ function recordTime() {
   attemptsText.textContent = "Attempts remaining: " + (maxAttempts - times.length);
 
   if (times.length < maxAttempts) {
-    state = "idle";
+    state = state.idle;
     boxController("idle", ms + " ms\nclick to continue");
   } else {
     showResults();
@@ -45,12 +49,12 @@ function recordTime() {
 
 function antiPrediction() {
   clearTimeout(timer);
-  state = "idle";
+  state = state.idle;
   boxController("idle", "too early, click to retry");
 }
 
 function showResults() {
-  state = "done";
+  state = state.done;
   box.classList.add("hidden");
   message.classList.add("hidden");
   list.innerHTML = "";
@@ -70,7 +74,7 @@ function showResults() {
 
 function reset() {
   times = [];
-  state = "idle";
+  state = state.idle;
   attemptsText.textContent = "Attempts remaining: " + maxAttempts;
   results.classList.add("hidden");
   box.classList.remove("hidden");
@@ -79,11 +83,11 @@ function reset() {
 }
 
 box.addEventListener("pointerdown", () => {
-  if (state === "idle") {
+  if (state === state.idle) {
     startRound();
-  } else if (state === "waiting") {
+  } else if (state === state.waiting) {
     antiPrediction();
-  } else if (state === "ready") {
+  } else if (state === state.ready) {
     recordTime();
   }
 });
