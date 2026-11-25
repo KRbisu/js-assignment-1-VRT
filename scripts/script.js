@@ -8,15 +8,17 @@ const restart = document.getElementById("restart");
 
 const maxAttempts = 5;
 let times = [];
-const STATES = {
+let timer;
+let startTime;
+
+const STATES = Object.freeze({
   idle: "idle",
   waiting: "waiting",
   ready: "ready",
   done: "done"
-}
+});
+
 let state = STATES.idle;
-let timer;
-let startTime;
 
 function boxController(className, text) {
   box.className = "box " + className;
